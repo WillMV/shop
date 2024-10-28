@@ -3,8 +3,6 @@ export const themes = {
         primary: "#86b4f0",
         secondary: "#fffddd",
         ligthGray: "#ebebeb",
-
         white: "#ffffff",
-
     }
 }
