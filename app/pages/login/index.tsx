@@ -1,8 +1,9 @@
-import Button from "@/components/Button";
-import Input from "@/components/Input";
+import Button from "@/app/components/Button";
+import Input from "@/app/components/Input";
+import { AuthContext } from "@/app/contexts/auth";
 import { themes } from "@/global/themes";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Text, View } from "react-native";
 import { styles } from "./styles";
 
@@ -10,33 +11,16 @@ import { styles } from "./styles";
 const Login = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [attemps, setAttemps] = useState<number>(0);
     const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const { signIn } = useContext(AuthContext);
+
 
     const getLogin = async () => {
         try {
             setLoading(true);
-            if (!email.includes("@") || !email.includes(".") || email.length < 5) {
-                throw new Error("Invalid email address");
-
-            }
-            if (password.length < 6) {
-                throw new Error("Invalid password");
-
-            }
-
-            await new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    if (attemps < 1) {
-                        setAttemps(1);
-                        return reject("Invalid credentials, please try again");
-                    }
-                    console.log("Logged");
-
-                    return resolve({ status: "OK", data: {}, });
-                }, 3000);
-            });
+            await signIn(email, password);
         } catch (error) {
             console.error(error);
         } finally {
