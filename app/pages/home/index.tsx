@@ -1,17 +1,17 @@
 import { ProductItem } from "@/app/components/ProductItem";
 import { ProductList } from "@/app/components/ProductList";
+import { SafeAreaPaddingsContext } from "@/app/contexts/safeAreaPaddings";
 import Product from "@/app/models/product";
 import { categories } from "@/mock/categories";
 import products from "@/mock/products";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 const Home = () => {
     const [items, setItems] = useState<Array<Product>>([]);
     const [loading, setLoading] = useState<boolean>(false)
-
+    const { safePaddings } = useContext(SafeAreaPaddingsContext);
 
     const getItems = async () => {
         await new Promise((resolve, _) => {
@@ -23,14 +23,6 @@ const Home = () => {
         })
     }
 
-    const insets = useSafeAreaInsets();
-
-    const safeAreaPadding = {
-        paddingTop: insets.top,
-        paddingLeft: insets.left,
-        paddingRight: insets.right,
-        paddingBottom: insets.bottom,
-    };
 
 
     useEffect(() => {
@@ -41,26 +33,30 @@ const Home = () => {
 
     return (
 
-        <View style={safeAreaPadding}>
+        <View style={safePaddings}>
             {
                 loading
-                    ? <ActivityIndicator size={50} style={{ justifyContent: "center", height: "100%" }} />
-                    : <FlatList data={categories} renderItem={
-                        (category) => {
-                            const data = products.filter((prod) => prod.category.id === category.item.id);
+                    ? <ActivityIndicator
+                        style={{ justifyContent: "center", height: "100%" }}
+                        size={50}
+                    />
+                    : <FlatList
+                        data={categories}
+                        renderItem={(category) => {
+                            const data = items.filter((item) => item.categoryId === category.item.id);
 
                             if (data.length < 1) return null;
 
                             return <ProductList
                                 key={category.item.id}
                                 title={category.item.name}
-                                data={data.map((prod) => new Product(prod.title, prod.images[0], prod.id, prod.price, prod.category.id))}
+                                data={data}
+                                showsHorizontalScrollIndicator={false}
                                 renderItem={(element) => <ProductItem product={element.item} />}
                             />
                         }
-                    } />
-
-
+                        }
+                    />
             }
         </View >
 

@@ -4,11 +4,13 @@ import products from "@/mock/products";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Details = () => {
     const [item, setItem] = useState<Product | null>(null);
 
     const route = useRoute<RouteProp<RootParamList, 'Details'>>();
+    const insets = useSafeAreaInsets();
 
     const { itemId } = route.params;
 
@@ -31,11 +33,13 @@ const Details = () => {
 
     return (
         <View>
-            {item ?
-                <Text>
-                    ItemDetail {itemId}
-                </Text> :
-                <ActivityIndicator />
+            {
+                item
+                    ? <Text>
+                        ItemDetail {itemId}
+                    </Text>
+                    :
+                    <ActivityIndicator />
             }
         </View>
     )
