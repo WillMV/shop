@@ -5,6 +5,7 @@ import { themes } from "@/global/themes";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useContext, useState } from "react";
 import { Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./styles";
 
 
@@ -15,6 +16,8 @@ const Login = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const { signIn } = useContext(AuthContext);
+
+    const insets = useSafeAreaInsets();
 
 
     const getLogin = async () => {
@@ -30,9 +33,16 @@ const Login = () => {
 
     };
 
-    return (
-        <View style={styles.container}>
+    const safeAreaPadding = {
+        paddingTop: insets.top,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+        paddingBottom: insets.bottom,
+    };
 
+    return (
+
+        <View style={[styles.container, safeAreaPadding]}>
             <View style={styles.boxLogo}>
                 <Text style={styles.title}>
                     Shop
@@ -70,6 +80,7 @@ const Login = () => {
                 <Text style={styles.textButton}>Don't have an account?<Text style={{ color: themes.colos.primary }} onPress={() => { }}> Create now.</Text></Text>
             </View>
         </View>
+
     );
 }
 

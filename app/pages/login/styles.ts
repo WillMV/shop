@@ -1,6 +1,7 @@
 import { themes } from "@/global/themes";
 import { } from "expo-font";
 import { StyleSheet } from "react-native";
+
 export const styles = StyleSheet.create({
 
     container: {

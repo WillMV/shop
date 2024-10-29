@@ -4,7 +4,8 @@ import Product from "@/app/models/product";
 import { categories } from "@/mock/categories";
 import products from "@/mock/products";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList } from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 const Home = () => {
@@ -22,6 +23,16 @@ const Home = () => {
         })
     }
 
+    const insets = useSafeAreaInsets();
+
+    const safeAreaPadding = {
+        paddingTop: insets.top,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+        paddingBottom: insets.bottom,
+    };
+
+
     useEffect(() => {
         setLoading(true);
         getItems().then((_) => { setLoading(false); })
@@ -29,7 +40,8 @@ const Home = () => {
 
 
     return (
-        <>
+
+        <View style={safeAreaPadding}>
             {
                 loading
                     ? <ActivityIndicator size={50} style={{ justifyContent: "center", height: "100%" }} />
@@ -50,7 +62,7 @@ const Home = () => {
 
 
             }
-        </>
+        </View >
 
     )
 };
